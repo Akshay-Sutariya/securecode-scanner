@@ -26,7 +26,7 @@ SecureCode Scanner is a static code analysis tool designed to detect security vu
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/securecode-scanner.git
+   git clone https://github.com/Akshay-Sutariya/securecode-scanner.git
    ```
 2. Navigate to the directory:
    ```bash
