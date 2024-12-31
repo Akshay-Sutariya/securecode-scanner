@@ -41,7 +41,7 @@ SecureCode Scanner is a static code analysis tool designed to detect security vu
 To run the tool, execute the following command:
 
 ```bash
-python tool.py
+python scanner.py
 ```
 
 The tool will prompt you for a directory to scan.
