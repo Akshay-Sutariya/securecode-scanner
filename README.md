@@ -125,16 +125,6 @@ new_vulnerability_patterns = {
 vulnerability_patterns.update(new_vulnerability_patterns)
 ```
 
-## Contribution
-
-We welcome contributions! If you'd like to help improve the SecureCode Scanner, you can fork the repository, make your changes, and submit a pull request.
-
-### How to Contribute
-1. Fork the repository
-2. Create a new branch
-3. Make your changes
-4. Test your changes
-5. Create a pull request describing your changes
 
 ## License
 
