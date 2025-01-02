@@ -1,178 +1,141 @@
 
 # SecureCode Scanner
 
-## Introduction
-SecureCode Scanner is a static code analysis tool designed to detect security vulnerabilities in Python source code. It scans code for specific patterns that may indicate common security flaws. This tool is useful for identifying issues like hardcoded passwords, unsafe code execution, insecure deserialization, and more. The tool supports scanning both individual files and entire directories, and it generates a comprehensive JSON report of vulnerabilities.
+## Overview
+
+**SecureCode Scanner** is a static code analysis tool designed to help identify common security vulnerabilities in code written in multiple programming languages, including Python, PHP, JavaScript, and Java. The tool scans code files for known patterns of vulnerabilities and generates a report in JSON format.
+
+The primary goal of this tool is to help developers and security professionals identify potential security risks early in the development process, enabling them to fix vulnerabilities before they are deployed to production.
 
 ## Features
-- **Vulnerability Detection:** Identifies a wide range of security vulnerabilities, including:
-  - Hardcoded passwords
-  - Insecure deserialization
-  - SQL injection risks
-  - Command injection
-  - Weak hashing algorithms
-  - Insecure input handling
-  - Dangerous imports and system calls
-  - And more...
-- **CLI Banner:** Displays an introductory message when the tool is run.
-- **Directory Scanning:** Recursively scans directories for Python files and analyzes them for vulnerabilities.
-- **Report Generation:** Outputs a detailed JSON report of the vulnerabilities found in the scanned code.
 
-## System Requirements
-- **Operating System:** Windows, Linux, macOS
-- **Python Version:** Python 3.6 or later
-- **Dependencies:** `re`, `os`, `json` (all standard libraries)
+- **Cross-Language Support**: Scans code in Python, PHP, JavaScript, and Java.
+- **Comprehensive Vulnerability Patterns**: Includes detection for common vulnerabilities like SQL injection, insecure deserialization, hardcoded passwords, unsafe file access, and more.
+- **CLI-based**: Operates through a command-line interface, making it easy to integrate into build and CI/CD pipelines.
+- **Error Handling**: Robust error handling ensures that scanning does not fail due to common file system issues or regex errors.
+- **JSON Report**: Results are outputted in a structured JSON format, which can be easily analyzed or integrated with other tools.
 
 ## Installation
-1. Clone the repository:
+
+1. **Clone the repository** (or download the script files directly):
+
    ```bash
-   git clone https://github.com/Akshay-Sutariya/securecode-scanner.git
-   ```
-2. Navigate to the directory:
-   ```bash
+   git clone https://github.com/your-username/securecode-scanner.git
    cd securecode-scanner
    ```
 
-3. The tool uses Python’s standard libraries, so no additional dependencies are required.
+2. **Install required dependencies** (if any):
+
+   The tool uses Python's built-in libraries (`re`, `os`, `json`), so no additional dependencies are required for basic functionality.
+
+   However, if you want to install extra packages (e.g., for testing), you can create a `requirements.txt` file:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ## Usage
 
-### Run the Tool
-To run the tool, execute the following command:
+To use the **SecureCode Scanner**, follow these steps:
+
+### 1. Launch the scanner
+
+Run the Python script from the command line:
 
 ```bash
-python scanner.py
+python secure_code_scanner.py
 ```
 
-The tool will prompt you for a directory to scan.
+### 2. Enter the directory path
 
-### Example Run
+Once you run the script, it will prompt you to enter the directory you want to scan for vulnerabilities. Enter the full path to the directory containing the code files.
+
+Example:
+
 ```bash
 Enter the target directory to scan: /path/to/your/code
-Starting secure code scan...
-Scanning: /path/to/your/code/example.py
-Scanning: /path/to/your/code/subdirectory/example2.py
-...
-Results saved to secure_code_scan_results.json
-Scan completed! Check secure_code_scan_results.json for details.
 ```
 
-The results will be saved in the `secure_code_scan_results.json` file.
+### 3. View the results
 
-## How It Works
-1. **Banner Display:** When the tool starts, the `display_banner` function shows an introductory message.
-2. **Pattern Matching:** The tool searches for the following vulnerabilities based on regex patterns:
-   - **Hardcoded Passwords:** Detects passwords, API keys, or tokens stored directly in the code.
-   - **Insecure Deserialization:** Flags unsafe usage of `pickle.loads()`.
-   - **SQL Injection:** Identifies patterns that could lead to SQL injection attacks.
-   - **Command Injection:** Flags unsafe system calls made with `os.system()` or `subprocess` functions.
-   - **Weak Hashing Algorithms:** Flags the use of weak hashing functions like MD5 or SHA1.
-   - **Insecure Input Handling:** Detects the use of `input()` without proper sanitization.
-   - **Insecure Randomness:** Flags insecure random functions like `random.choice()` or `random.randint()`.
-   - **HTTP URLs:** Flags hardcoded HTTP URLs (which should be HTTPS).
-   - **Open Redirects:** Flags potential open redirects in web applications.
-   - **Sensitive Logging:** Detects logging of sensitive information like passwords or tokens.
-   - **Overly Permissive Permissions:** Flags file permission settings that may expose sensitive files.
-3. **Scanning Files and Directories:** The tool scans files in the specified directory (and subdirectories) for these patterns. Python files (`.py`) are the default, but you can easily adjust it to scan other file types.
-4. **Reporting:** When vulnerabilities are found, the tool generates a JSON file that lists:
-   - The file path
-   - The line number where the vulnerability is found
-   - The content of the vulnerable line
+The tool will scan all Python (`.py`), PHP (`.php`), JavaScript (`.js`), and Java (`.java`) files in the directory and its subdirectories. After scanning, it will generate a file called `secure_code_scan_results.json` in the same directory.
 
-### Vulnerability Patterns
-The tool detects the following vulnerabilities based on predefined patterns:
+This file will contain detailed information about any vulnerabilities found, including the file path, vulnerability type, line number, and the content of the vulnerable line.
 
-- **Hardcoded Passwords:**
-  ```regex
-  r"['"](password|passwd|pwd)['"]\s*:\s*['"].+['"]"
-  ```
+### Example output:
 
-- **Insecure Deserialization:**
-  ```regex
-  r"pickle\.loads\("
-  ```
+```json
+{
+    "path/to/file.py": [
+        {
+            "vulnerability": "hardcoded_password",
+            "line_number": 42,
+            "line_content": "password = 'mysecretpassword'"
+        },
+        {
+            "vulnerability": "eval_usage",
+            "line_number": 55,
+            "line_content": "eval(user_input)"
+        }
+    ]
+}
+```
 
-- **SQL Injection:**
-  ```regex
-  r"(SELECT|INSERT|UPDATE|DELETE)\s+.*FROM.*['"].*['"]"
-  ```
+## Vulnerabilities Detected
 
-- **Command Injection:**
-  ```regex
-  r"os\.system\(|subprocess\.(call|run|Popen)\("
-  ```
+### Python Vulnerabilities
+- **Hardcoded Passwords**: Detects password values hardcoded in the code.
+- **Eval Usage**: Flags any usage of `eval()`, which can execute arbitrary code.
+- **Insecure Deserialization**: Detects the use of `pickle.loads()`, which can be unsafe if deserialized data is untrusted.
+- **SQL Injection**: Looks for vulnerable SQL queries that might be susceptible to injection attacks.
+- **Command Injection**: Flags usage of system commands via functions like `os.system()` or `subprocess.call()`.
 
-- **Weak Hashing:**
-  ```regex
-  r"hashlib\.(md5|sha1)\("
-  ```
+### PHP Vulnerabilities
+- **SQL Injection**: Flags unsafe usage of SQL queries with potential injection risks.
+- **XSS Vulnerability**: Flags PHP code that directly outputs user input, which might be susceptible to cross-site scripting attacks.
+- **Insecure File Upload**: Detects unsafe file upload handling, which can lead to remote code execution.
 
-- **Insecure Input:**
-  ```regex
-  r"(?<!#).*input\("
-  ```
+### JavaScript Vulnerabilities
+- **Eval Usage**: Detects unsafe usage of `eval()`, which can execute arbitrary JavaScript code.
+- **InnerHTML Usage**: Flags potentially dangerous usage of `.innerHTML`, which can introduce cross-site scripting (XSS) vulnerabilities.
+- **Hardcoded API Keys**: Flags hardcoded API keys, tokens, or sensitive information.
 
-- **Insecure Randomness:**
-  ```regex
-  r"random\.(randint|random|choice)\("
-  ```
+### Java Vulnerabilities
+- **SQL Injection**: Flags potential SQL injection risks in Java database queries.
+- **Hardcoded Passwords**: Flags hardcoded password values in Java code.
+- **Insecure Logging**: Detects usage of insecure logging methods that might expose sensitive information.
 
-- **HTTP URLs:**
-  ```regex
-  r"http://[^\s]+"
-  ```
+## Error Handling
 
-- **Open Redirects:**
-  ```regex
-  r"redirect\((.*request.args.*)\)"
-  ```
+The tool has robust error handling to handle:
+- **File Not Found**: If the tool cannot access a file, it will output a relevant error message.
+- **Regex Errors**: If a regular expression fails, the tool catches the error and continues scanning other files.
+- **Directory Not Found**: If the provided directory doesn't exist, an appropriate message is displayed.
+- **General I/O Errors**: Issues with file reading or writing are caught and reported.
 
-- **Hardcoded API Keys:**
-  ```regex
-  r"(apikey|api_key|token|access_token)\s*=\s*['"].+['"]"
-  ```
+## Extending the Tool
 
-- **Overly Permissive Permissions:**
-  ```regex
-  r"os\.chmod\(.+, 0o7[0-7][0-7]\)"
-  ```
+You can extend the **SecureCode Scanner** by adding new vulnerability patterns for other languages or new types of vulnerabilities. To add new patterns, modify the `vulnerability_patterns` dictionary and add corresponding regular expressions for the vulnerability you want to detect.
 
-- **Sensitive Logging:**
-  ```regex
-  r"logging\.(debug|info|warn|error)\(.*(password|secret|token)"
-  ```
+```python
+new_vulnerability_patterns = {
+    "new_vulnerability_type": r"your-regex-pattern-here"
+}
 
-## Code Breakdown
+vulnerability_patterns.update(new_vulnerability_patterns)
+```
 
-### `display_banner()`
-Displays a welcome banner when the tool is run.
+## Contribution
 
-### `scan_file(file_path)`
-Scans an individual file for vulnerabilities:
-- Reads the file line by line
-- Applies regex patterns to detect security vulnerabilities
-- Returns a list of found vulnerabilities, including the name, line number, and content.
+We welcome contributions! If you'd like to help improve the SecureCode Scanner, you can fork the repository, make your changes, and submit a pull request.
 
-### `scan_directory(directory_path)`
-Recursively scans the directory for Python files and calls `scan_file` for each one. Vulnerabilities are stored in a dictionary with file paths as keys and vulnerability details as values.
-
-### `save_results(results, filename)`
-Saves the results to a JSON file for easy review. The file is formatted with indentation for better readability.
-
-### Main Execution
-In the `if __name__ == "__main__"` block:
-- The banner is displayed.
-- The user is prompted to input a directory to scan.
-- The scan starts, and results are saved in a JSON file.
-
-## Contributing
-To contribute:
-1. Fork the repository.
-2. Create a branch for your changes.
-3. Submit a pull request with a description of your changes.
+### How to Contribute
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Test your changes
+5. Create a pull request describing your changes
 
 ## License
-This tool is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-## Contact
-For inquiries or support, contact us at [your.email@example.com].
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
