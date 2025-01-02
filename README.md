@@ -20,7 +20,7 @@ The primary goal of this tool is to help developers and security professionals i
 1. **Clone the repository** (or download the script files directly):
 
    ```bash
-   git clone https://github.com/your-username/securecode-scanner.git
+   git clone https://github.com/Akshay-Sutariya/securecode-scanner.git
    cd securecode-scanner
    ```
 
