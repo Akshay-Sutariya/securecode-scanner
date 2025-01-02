@@ -43,7 +43,7 @@ To use the **SecureCode Scanner**, follow these steps:
 Run the Python script from the command line:
 
 ```bash
-python secure_code_scanner.py
+python scanner.py
 ```
 
 ### 2. Enter the directory path
